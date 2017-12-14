@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLoginLinearLayout"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#222F64"
+    android:elevation="1dp"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    tools:context="com.em3.securecompany.MainLoginActivity">
+
+    <TextView
+        android:id="@+id/mainLoginName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Squad Security"
+        android:textAlignment="center"
+        android:textSize="40sp" />
+
+    <ImageView
+        android:id="@+id/imageLogoView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/mainLoginUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="#4f9bec"
+        android:ems="10"
+        android:hint="Usuario"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/mainLoginPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#4f9bec"
+        android:ems="10"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:textSize="20sp" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mainActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:gravity="fill"
+            android:onClick="loginOrSignUp"
+            android:text="Iniciar Sesión"
+            android:textAlignment="center" />
+
+    </GridLayout>
+
+</LinearLayout>

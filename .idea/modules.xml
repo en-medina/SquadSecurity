@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/libs/Parse-SDK-Android-1.16.0/Parse/Parse.iml" filepath="$PROJECT_DIR$/app/libs/Parse-SDK-Android-1.16.0/Parse/Parse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/libs/Parse-SDK-Android-1.16.0/ParseStarterProject/ParseStarterProject.iml" filepath="$PROJECT_DIR$/app/libs/Parse-SDK-Android-1.16.0/ParseStarterProject/ParseStarterProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SecureCompany.iml" filepath="$PROJECT_DIR$/SecureCompany.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+    </modules>
+  </component>
+</project>

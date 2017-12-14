@@ -1,0 +1,3 @@
+include ':app', ':ParseStarterProject', ':Parse'
+project(':ParseStarterProject').projectDir = new File('app/libs/Parse-SDK-Android-1.16.0/ParseStarterProject')
+project(':Parse').projectDir = new File('app/libs/Parse-SDK-Android-1.16.0/Parse')
