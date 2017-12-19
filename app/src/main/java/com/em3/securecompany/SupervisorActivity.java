@@ -102,7 +102,7 @@ public class SupervisorActivity extends AppCompatActivity{
             return true;
         }
         else if(id == R.id.action_logout){
-            serverConnection.logout();
+            serverConnection.logout(serverConnection.getSupervisorRank());
             Intent intent = new Intent(getApplicationContext(),MainLoginActivity.class);
             startActivity(intent);
             finish();
@@ -141,7 +141,7 @@ public class SupervisorActivity extends AppCompatActivity{
                         Toast.makeText(guardia_context, "An username and password are required.", Toast.LENGTH_SHORT).show();
                     else {
                         serverConnection = new ServerConnection(getActivity().getApplicationContext(),getActivity());
-                        if(serverConnection.checkCredentials(username, password)){
+                        if(serverConnection.checkCredentials(username, password, false)){
                             ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseObject>() {
                                 @Override
                                 public void done(ParseObject object, ParseException e) {

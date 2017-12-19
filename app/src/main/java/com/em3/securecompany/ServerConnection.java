@@ -45,7 +45,13 @@ public class ServerConnection extends Application {
     private Activity activity;
     private SharedPreferences credentials;
     private static boolean localDataStoreEnable = false;
-    private static ParseUser curUser;
+    private static ParseUser curUser, anyGuardian;
+    public int getSupervisorRank(){
+        if(curUser == null)
+            return -1;
+        return curUser.getInt("rank");
+    }
+
     public ServerConnection(Context param, Activity param1)
     {
         context = param;
@@ -80,16 +86,20 @@ public class ServerConnection extends Application {
             return true;
         if(!username.equals(null))
             return false;
-        return checkCredentials(username, credentials.getString("password", null));
+        return checkCredentials(username, credentials.getString("password", null), true);
     }
-    public boolean checkCredentials(String username, String password)
+    public boolean checkCredentials(String username, String password, boolean isMainLogin)
     {
         ParseUser user = new ParseUser();
         boolean ans;
 
         try {
-            curUser = user.logIn(username, password);
-            credentials.edit().putString("username", username).putString("password", password).apply();
+
+            if(isMainLogin) {
+                curUser = user.logIn(username, password);
+                credentials.edit().putString("username", username).putString("password", password).apply();
+            }
+            else anyGuardian = user.logIn(username, password);
             ans = true;
         } catch (ParseException e) {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -100,28 +110,35 @@ public class ServerConnection extends Application {
 
     public void fillData(final View view)
     {
-        ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject object, ParseException e) {
-                if(e != null)
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                else {
-                    ((TextView)view.findViewById(R.id.profileFullName)).setText(object.getString("name")+" "+object.getString("lastname"));
-                    ((TextView)view.findViewById(R.id.profileIdCard)).setText(object.getString("idCard"));
-                    ((TextView)view.findViewById(R.id.profileType)).setText(object.getString("rank"));
+        if(curUser == null) {
+            Toast.makeText(context, "There is an unusual error, please log out", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ((TextView)view.findViewById(R.id.profileFullName)).setText(curUser.getString("name")+" "+curUser.getString("lastname"));
+        ((TextView)view.findViewById(R.id.profileIdCard)).setText(curUser.getString("idCard"));
+        ((TextView)view.findViewById(R.id.profileType)).setText(curUser.getString("rank"));
 
-                    Calendar birth = Calendar.getInstance();
-                    birth.setTime(object.getDate("birth"));
-                    int age = Calendar.getInstance().get(Calendar.YEAR) - birth.get(Calendar.YEAR);
-                    ((TextView)view.findViewById(R.id.profileAge)).setText(Integer.toString(age));
-                    ((TextView)view.findViewById(R.id.profileTelephone)).setText(object.getString("telNumber"));
-                    ((TextView)view.findViewById(R.id.profileCelullar)).setText(object.getString("celNumber"));
-                }
-            }
-        });
+        Calendar birth = Calendar.getInstance();
+        birth.setTime(curUser.getDate("birth"));
+        int age = Calendar.getInstance().get(Calendar.YEAR) - birth.get(Calendar.YEAR);
+        ((TextView)view.findViewById(R.id.profileAge)).setText(Integer.toString(age));
+        ((TextView)view.findViewById(R.id.profileTelephone)).setText(curUser.getString("telNumber"));
+        ((TextView)view.findViewById(R.id.profileCelullar)).setText(curUser.getString("celNumber"));
     }
-    public void logout()
+    public void logout(int rank)
     {
+        switch (rank){
+            case RankClass.Administrator:
+            case RankClass.Supervisor:
+                curUser.logOut();
+                break;
+            case RankClass.Guardian:
+                anyGuardian.logOut();
+                break;
+            default:
+                break;
+         }
+/*
         ParseUser.logOutInBackground(new LogOutCallback() {
             @Override
             public void done(ParseException e) {
@@ -129,6 +146,7 @@ public class ServerConnection extends Application {
                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+        */
     }
     public void changeActivity(final Class nextActivity)
     {

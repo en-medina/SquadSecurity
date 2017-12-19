@@ -3,10 +3,11 @@ package com.em3.securecompany;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import android.util.Log;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -17,6 +18,7 @@ public class MainLoginActivity extends AppCompatActivity {
     ServerConnection serverConnection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         serverConnection = new ServerConnection(getApplicationContext(), this);
         if(serverConnection.isUserLogIn())
@@ -32,10 +34,15 @@ public class MainLoginActivity extends AppCompatActivity {
                 if(e != null)
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 else{
-                    String rank = object.getString("rank");
-                    if(rank.equals("supervisor")) serverConnection.changeActivity(SupervisorActivity.class);
-                    else if(rank.equals("administrador")) serverConnection.changeActivity(SupervisorActivity.class);
-                    else serverConnection.changeActivity(SupervisorActivity.class);
+                    switch (object.getInt("rank")){
+                        case RankClass.Administrator:
+                        case RankClass.Supervisor:
+                        case RankClass.Guardian:
+                            serverConnection.changeActivity(SupervisorActivity.class);
+                            break;
+                        default:
+                            break;
+                    }
                     finish();
                 }
             }
@@ -50,7 +57,7 @@ public class MainLoginActivity extends AppCompatActivity {
         if(username.equals("") || password.equals(""))
             Toast.makeText(this, "An username and password are required.", Toast.LENGTH_SHORT).show();
         else {
-            if(serverConnection.checkCredentials(username, password)) {
+            if(serverConnection.checkCredentials(username, password, true)) {
                 setPrivilegeActivity();
 
             }
